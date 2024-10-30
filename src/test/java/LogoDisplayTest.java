@@ -23,13 +23,12 @@ public class LogoDisplayTest {
         driver = new ChromeDriver();
         driver.get("https://guest:welcome2qauto@qauto.forstudy.space/");
 
-        // Встановлюємо "explicit wait" тривалістю 10 секунд
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @Test(description = "Перевірка відображення логотипу на сторінці")
     public void testLogoDisplay() {
-        // Знайти елемент логотипу за допомогою XPath
+
         WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class, 'header_logo')]")));
 
         if (logo.isDisplayed()) {
@@ -38,7 +37,6 @@ public class LogoDisplayTest {
             System.out.println("Logo does not displayed");
         }
 
-        // Додаткова перевірка результату
         Assert.assertTrue(logo.isDisplayed(), "Логотип не відображається на сторінці.");
     }
 
