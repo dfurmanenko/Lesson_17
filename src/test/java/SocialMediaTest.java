@@ -18,7 +18,7 @@ public class SocialMediaTest {
     public void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get("https://guest:welcome2qauto@qauto.forstudy.space/");
+        driver.get("https://guest:welcome2qauto@qauto.forstudy.space/"); // Заміни на URL тестової сторінки
     }
 
     @Test
@@ -26,17 +26,18 @@ public class SocialMediaTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
+        // Перехід у фрейм, якщо блок соцмереж знаходиться всередині нього
+        WebElement frameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("iframe.social-frame")));
+        driver.switchTo().frame(frameElement);
 
+        // Зчитування тайтлу фрейму для перевірки
+        String frameTitle = (String) js.executeScript("return document.title;");
+        System.out.println("Title of the iframe: " + frameTitle);
+
+        // Прокручуємо сторінку вниз, щоб завантажити блок соцмереж
         js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
+        // Перевірка на наявність блоку соцмереж
         boolean socialBlockVisible = wait.until(driver -> {
             try {
                 return driver.findElement(By.cssSelector(".social-block")).isDisplayed();
@@ -44,17 +45,16 @@ public class SocialMediaTest {
                 return false;
             }
         });
-
         Assert.assertTrue(socialBlockVisible, "Social media block не знайдений на сторінці навіть після прокручування.");
 
-
+        // Пошук блоку соцмереж
         WebElement socialMediaBlock = driver.findElement(By.cssSelector(".social-block"));
 
-
+        // Перевірка кількості іконок соцмереж
         List<WebElement> socialIcons = socialMediaBlock.findElements(By.tagName("a"));
         Assert.assertEquals(socialIcons.size(), 5, "Social network block doesn’t contain 5 items");
 
-
+        // Очікувані URL-адреси для перевірки
         List<String> expectedUrls = List.of(
                 "https://facebook.com/",
                 "https://twitter.com/",
@@ -65,20 +65,23 @@ public class SocialMediaTest {
 
         for (int i = 0; i < socialIcons.size(); i++) {
             WebElement icon = socialIcons.get(i);
-            js.executeScript("arguments[0].click();", icon);
+            js.executeScript("arguments[0].click();", icon); // Клік через JavaScriptExecutor
 
             ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
             Assert.assertTrue(tabs.size() > 1, "New tab did not open after clicking");
 
-
+            // Перемикання на нову вкладку та перевірка URL
             driver.switchTo().window(tabs.get(1));
             String actualUrl = driver.getCurrentUrl();
             Assert.assertTrue(actualUrl.contains(expectedUrls.get(i)), "Incorrect URL of Social network");
 
-
+            // Закриття вкладки та повернення на основну
             driver.close();
             driver.switchTo().window(tabs.get(0));
         }
+
+        // Повернення до основного контенту після завершення тесту
+        driver.switchTo().defaultContent();
     }
 
     @AfterClass
