@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 public class GaragePage {
     WebDriver driver;
 
-    @FindBy(css = "button[data-testid='add-car-button']")
+    @FindBy(css = "button.btn.btn-primary")
     WebElement addCarButton;
 
     @FindBy(css = "select[data-testid='car-brand']")
