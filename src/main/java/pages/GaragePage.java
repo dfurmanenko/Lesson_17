@@ -22,7 +22,7 @@ public class GaragePage {
     @FindBy(css = "input#addCarMileage")
     WebElement mileageInput;
 
-    @FindBy(css = "button[data-testid='save-car-button']")
+    @FindBy(xpath = "//button[text()='Add']")
     WebElement saveCarButton;
 
     @FindBy(xpath = "//div[contains(@class, 'car-name') and contains(text(), 'Audi TT')]")
