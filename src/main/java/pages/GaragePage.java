@@ -12,13 +12,14 @@ public class GaragePage {
     @FindBy(css = "button.btn.btn-primary")
     WebElement addCarButton;
 
-    @FindBy(css = "select[data-testid='car-brand']")
+    @FindBy(css = "select#addCarBrand")
+
     WebElement brandDropdown;
 
-    @FindBy(css = "select[data-testid='car-model']")
+    @FindBy(css = "select#addCarModel")
     WebElement modelDropdown;
 
-    @FindBy(css = "input[data-testid='car-mileage']")
+    @FindBy(css = "input#addCarMileage")
     WebElement mileageInput;
 
     @FindBy(css = "button[data-testid='save-car-button']")
